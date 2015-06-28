@@ -322,9 +322,7 @@ bool DiskCache::Get(const std::string &key, ReadCacheDataFun &&fun) {
       });
 
       fin.open(file, std::ios::binary);
-      fun(fin);
-
-      return true;
+      return fun(fin);
 
     } else {
       EnqueueAction([this, sha1_key]{
@@ -335,8 +333,6 @@ bool DiskCache::Get(const std::string &key, ReadCacheDataFun &&fun) {
   }
 
   lock.unlock();
-
-  fun(fin);
 
   return false;
 }

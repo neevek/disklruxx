@@ -20,7 +20,7 @@ namespace lru {
 class DiskCache {
  public:
    using WriteCacheDataFun = std::function<bool(std::ofstream &)>;
-   using ReadCacheDataFun = std::function<void(std::ifstream &)>;
+   using ReadCacheDataFun = std::function<bool(std::ifstream &)>;
 
    DiskCache(const std::string &cache_dir, int app_version, 
        long max_cache_size, long max_item_count);

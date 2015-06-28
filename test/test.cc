@@ -22,12 +22,7 @@ void test_read_write_with_multithreads(lru::DiskCache &cache) {
             });
 
         } else {
-          cache.Get(std::to_string(value), [value](std::ifstream &fin) {
-            if (!fin.is_open()) {
-              LOG_V("main", "key not found: %d", value);
-              return;
-            }
-
+          bool found = cache.Get(std::to_string(value), [value](std::ifstream &fin) {
             std::string data;
             int buf_size = 1024;
             char buf[buf_size + 1];
@@ -43,7 +38,11 @@ void test_read_write_with_multithreads(lru::DiskCache &cache) {
             }
 
             LOG_V("main", "READ data: %s", data.c_str());
+
+            return true;
           });
+
+          LOG_V("main", "read cache with get: %d", found);
         }
       }
     });
