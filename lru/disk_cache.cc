@@ -335,8 +335,6 @@ bool DiskCache::Get(const std::string &key, ReadCacheDataFun &&fun) {
 
   }
 
-  lock.unlock();
-
   return false;
 }
 
