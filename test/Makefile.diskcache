@@ -1,14 +1,14 @@
 CC=g++
-CFLAGS=-I.. -std=c++11 -Wall -DLOG_DEBUG -c
-BIN=testlruxx
+CFLAGS=-I.. -std=c++11 -Wall -DLOG_VERBOSE -c
+BIN=testdiskcache
 
 all: ${BIN}
 
-${BIN}: test.o disk_cache.o file_util.o sha1.o
-	${CC} test.o disk_cache.o file_util.o sha1.o -o ${BIN}
+${BIN}: test_disk_cache.o disk_cache.o file_util.o sha1.o
+	${CC} test_disk_cache.o disk_cache.o file_util.o sha1.o -o ${BIN}
 
-test.o: test.cc
-	${CC} ${CFLAGS} -o test.o test.cc
+test_disk_cache.o: test_disk_cache.cc
+	${CC} ${CFLAGS} -o test_disk_cache.o test_disk_cache.cc
 
 disk_cache.o: ../lru/disk_cache.cc
 	${CC} ${CFLAGS} -o disk_cache.o ../lru/disk_cache.cc

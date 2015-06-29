@@ -1,0 +1,17 @@
+CC=g++
+CFLAGS=-I.. -std=c++11 -Wall -DLOG_VERBOSE -c
+BIN=testmemorycache
+
+all: ${BIN}
+
+${BIN}: test_memory_cache.o memory_cache.o
+	${CC} test_memory_cache.o memory_cache.o -o ${BIN}
+
+test_memory_cache.o: test_memory_cache.cc
+	${CC} ${CFLAGS} -o test_memory_cache.o test_memory_cache.cc
+
+memory_cache.o: ../lru/memory_cache.cc
+	${CC} ${CFLAGS} -o memory_cache.o ../lru/memory_cache.cc
+
+clean: 
+	rm -f *.o ${BIN}
