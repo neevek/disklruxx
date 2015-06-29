@@ -12,6 +12,7 @@
 #include <list>
 #include <functional>
 #include <mutex>
+#include <thread>
 #include <condition_variable>
 #include "common/blocking_queue.h"
 
@@ -24,7 +25,7 @@ class DiskCache {
 
    DiskCache(const std::string &cache_dir, int app_version, 
        long max_cache_size, long max_item_count);
-   ~DiskCache() = default;
+   ~DiskCache();
 
  public:
    bool Put(const std::string &key, WriteCacheDataFun &&fun);
@@ -72,6 +73,7 @@ class DiskCache {
    std::ofstream journal_ofstream_;
    BlockingQueue<std::function<void()>> action_queue_;
 
+   std::thread action_thread_;
    std::mutex mutex_;
    std::condition_variable cond_;
 };

@@ -9,8 +9,6 @@
 #include "common/sha1/sha1.h"
 #include "log/log.h"
 
-#include <thread>
-
 namespace lru {
 
 namespace {
@@ -49,10 +47,15 @@ DiskCache::DiskCache(const std::string &cache_dir, int app_version,
   }
 
   // start the background thread
-  std::thread(&DiskCache::RunQueuedActions, this).detach();
+  action_thread_ = std::thread(&DiskCache::RunQueuedActions, this);
 
   // run the INIT procedure in the background thread
   EnqueueAction(std::bind(&DiskCache::InitFromJournal, this));
+}
+
+DiskCache::~DiskCache() {
+  action_queue_.QuitBlocking();
+  action_thread_.join();
 }
 
 void DiskCache::InitFromJournal() {
@@ -473,6 +476,8 @@ void DiskCache::RunQueuedActions() {
     action_queue_.Front()();
     action_queue_.PopFront();
   }
+
+  LOG_D("lru::DiskCache", "quit action queue.");
 }
 
 };  // namespace lru
