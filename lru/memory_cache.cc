@@ -97,11 +97,12 @@ void MemoryCache::RemoveInternal(const std::string &key) {
   auto iter = entry_map_.find(key);
   if (iter != entry_map_.end()) {
     void *value = iter->second->second;
-    entry_list_.erase(iter->second);
-    entry_map_.erase(iter);
 
     cur_cache_size_ -= calculate_obj_size(key, value);
     on_obj_evicted(key, value);
+
+    entry_list_.erase(iter->second);
+    entry_map_.erase(iter);
   }
 }
 
