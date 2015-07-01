@@ -71,6 +71,21 @@ void MemoryCache::Remove(const std::string &key) {
   RemoveInternal(key);
 }
 
+void MemoryCache::EvictAll() {
+  std::lock_guard<std::mutex> lock(mutex_);
+
+  LOG_D("lru::MemoryCache", "going to evict all, entries: %zd, size: %ld", 
+      entry_list_.size(), cur_cache_size_);
+
+  while (cur_cache_size_ > 0) {
+    auto &item = entry_list_.back();    
+    RemoveInternal(item.first);
+  }
+
+  LOG_D("lru::MemoryCache", "after eviction, entries: %zd, size: %ld", 
+      entry_list_.size(), cur_cache_size_);
+}
+
 void MemoryCache::EvictIfNeeded() {
   if (cur_cache_size_ > max_cache_size_ || 
       entry_list_.size() > max_item_count_) {

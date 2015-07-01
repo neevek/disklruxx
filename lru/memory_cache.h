@@ -31,6 +31,7 @@ class MemoryCache {
    // return the old value if exists
    void Put(const std::string &key, void *value);
    void Remove(const std::string &key);
+   void EvictAll();
    inline long ItemCount() const;
    inline long MaxItemCount() const;
    inline long CurrentCacheSize() const;

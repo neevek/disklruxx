@@ -33,6 +33,8 @@ int main(int argc, const char *argv[]) {
 
   cache.Remove("a");
 
+  cache.EvictAll();
+
   std::cout << "item count: " << cache.ItemCount() << std::endl;
   std::cout << "cache size: " << cache.CurrentCacheSize() << std::endl;
   
