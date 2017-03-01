@@ -354,8 +354,11 @@ bool DiskCache::RemoveWithLocking(const std::string &sha1_key) {
 
 bool DiskCache::RemoveWithoutLocking(const std::string &sha1_key, 
     bool in_background) {
-
   auto iter = entry_map_.find(sha1_key);
+  if (iter == entry_map_.end()) {
+    return;
+  }
+
   LOG_V("lru::DiskCache", ">>>>> removing... %s, %d", 
       sha1_key.c_str(), iter != entry_map_.end());
 
